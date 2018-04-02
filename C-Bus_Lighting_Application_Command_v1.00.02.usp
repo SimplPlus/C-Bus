@@ -1,0 +1,281 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:apcube.com
+System Name:C-Bus
+System Number:20180331
+Programmer:iConsole
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+// #ENABLE_DYNAMIC
+ #SYMBOL_NAME "C-Bus_Lighting_Application_Command_v1.00.02"
+// #HINT ""
+ #DEFINE_CONSTANT Header 0x05
+ #DEFINE_CONSTANT BHeader 0x03
+ #DEFINE_CONSTANT SAL 0x38
+// #CATEGORY "" 
+#CATEGORY "4" // Device Interface
+// #PRINT_TO_TRACE
+// #DIGITAL_EXPAND 
+// #ANALOG_SERIAL_EXPAND 
+// #OUTPUT_SHIFT 
+// #HELP_PDF_FILE ""
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+// #ENCODING_ASCII
+// #ENCODING_UTF16
+// #ENCODING_INHERIT_FROM_PARENT
+// #ENCODING_INHERIT_FROM_PROGRAM
+#HELP_BEGIN
+RS232, 9600,8,1,n
+
+Bridge = 0 use local C-Bus Networks.
+
+#HELP_END
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+ DIGITAL_INPUT iOn, iOff, _SKIP_;
+ ANALOG_INPUT iLevel, _SKIP_;
+// STRING_INPUT 
+// BUFFER_INPUT 
+
+// DIGITAL_OUTPUT 
+// ANALOG_OUTPUT 
+ STRING_OUTPUT To_C_Bus$;
+
+/*******************************************************************************************
+  Parameters
+  (Uncomment and declare parameters as needed)
+*******************************************************************************************/
+ INTEGER_PARAMETER _SKIP_, _SKIP_, _SKIP_, _SKIP_, _SKIP_, _SKIP_, Bridge, Addr, Ramp_Rate;
+// SIGNED_INTEGER_PARAMETER
+// LONG_INTEGER_PARAMETER
+// SIGNED_LONG_INTEGER_PARAMETER
+// STRING_PARAMETER
+
+/*******************************************************************************************
+  Parameter Properties
+  (Uncomment and declare parameter properties as needed)
+*******************************************************************************************/
+#BEGIN_PARAMETER_PROPERTIES Bridge
+    propValidUnits = unitDecimal|unitHex;// unitString or unitDecimal|unitHex|unitPercent|unitCharacter|unitTime|unitTicks;
+    propDefaultUnit = unitDecimal;// unitString, unitDecimal, unitHex, unitPercent, unitCharacter, unitTime or unitTicks;
+    propBounds = 0d , 254d;
+    propDefaultValue = 0d;  // or, propDefaultValue = "";
+   // propList = // { "value" , "label" } , { "value" , "label" } , ... ;
+   // propShortDescription = "status_bar_hint_text";
+   // #BEGIN_PROP_FULL_DESCRIPTION  line_1...  line_2...  line_n  #END_PROP_FULL_DESCRIPTION
+   // #BEGIN_PROP_NOTES line_1...  line_2...  line_n  #END_PROP_NOTES
+#END_PARAMETER_PROPERTIES
+#BEGIN_PARAMETER_PROPERTIES Addr
+    propValidUnits = unitDecimal|unitHex;// unitString or unitDecimal|unitHex|unitPercent|unitCharacter|unitTime|unitTicks;
+    propDefaultUnit = unitDecimal;// unitString, unitDecimal, unitHex, unitPercent, unitCharacter, unitTime or unitTicks;
+    propBounds = 0d , 254d;
+    propDefaultValue = 1d;  // or, propDefaultValue = "";
+   // propList = // { "value" , "label" } , { "value" , "label" } , ... ;
+   // propShortDescription = "status_bar_hint_text";
+   // #BEGIN_PROP_FULL_DESCRIPTION  line_1...  line_2...  line_n  #END_PROP_FULL_DESCRIPTION
+   // #BEGIN_PROP_NOTES line_1...  line_2...  line_n  #END_PROP_NOTES
+#END_PARAMETER_PROPERTIES
+#BEGIN_PARAMETER_PROPERTIES Ramp_Rate
+    propValidUnits = unitDecimal|unitHex;// unitString or unitDecimal|unitHex|unitPercent|unitCharacter|unitTime|unitTicks;
+    propDefaultUnit = unitHex;// unitString, unitDecimal, unitHex, unitPercent, unitCharacter, unitTime or unitTicks;
+    //propBounds =  , 256d;
+    propDefaultValue = 0x02;  // or, propDefaultValue = "";
+    propList = {0x02, "0s"}, {0x0A, "4s"}, {0x12, "8s"}, {0x1A, "12s"}, {0x22, "20s"}, {0x2A, "30s"}, {0x32, "40s"}, {0x3A, "1m"}, {0x42, "1.5m"}, {0x4A, "2m"},
+			{0x52, "3m"}, {0x5A, "5m"}, {0x62, "7m"}, {0x6A, "10m"}, {0x72, "15m"}, {0x7A, "17m"}; // { "value" , "label" } , { "value" , "label" } , ... ;
+   // propShortDescription = "status_bar_hint_text";
+   // #BEGIN_PROP_FULL_DESCRIPTION  line_1...  line_2...  line_n  #END_PROP_FULL_DESCRIPTION
+   // #BEGIN_PROP_NOTES line_1...  line_2...  line_n  #END_PROP_NOTES
+#END_PARAMETER_PROPERTIES
+
+
+/*******************************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: myString = "";
+*******************************************************************************************/
+ INTEGER CMD, Level;
+// LONG_INTEGER
+// SIGNED_INTEGER
+// SIGNED_LONG_INTEGER
+// STRING
+
+/*******************************************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+*******************************************************************************************/
+Function MKCBus(String Data$)
+{
+	Integer i, Sum;
+	String Temp$[3][100];
+
+	Temp$[1] = Data$;
+	Temp$[2] = Temp$[1];
+
+	Sum = 0;
+	do{
+		Sum = Sum + GetC(Temp$[1]);
+	}Until(Len(Temp$[1]) = 0);
+
+	Sum = 0x100 - Sum;
+    Temp$[3] = "";
+
+	do{
+		MakeString(Temp$[3], "%s%02X", Temp$[3], GetC(Temp$[2]));
+	}Until(Len(Temp$[2]) = 0);
+
+	MakeString(To_C_Bus$, "\x5C%s%02X\x67\x0D", Temp$[3], Sum);
+}
+
+Function MKString(Integer Type)
+{
+	String To_Processor$[100];
+
+	Switch(Type){
+		Case(1):{//On/Off
+			if(Bridge > 0){
+				MakeString(To_Processor$, "%s%s\x09%s%s%s", chr(BHeader), chr(Bridge), chr(SAL), chr(CMD), chr(Addr));
+			}else{
+				MakeString(To_Processor$, "%s%s\x00%s%s", chr(Header), chr(SAL), chr(CMD), chr(Addr));
+			}
+		}
+		Case(2):{//Level
+			if(Bridge > 0){
+				MakeString(To_Processor$, "%s%s\x09%s%s%s%s", chr(BHeader), chr(Bridge), chr(SAL), chr(Ramp_Rate), chr(Addr), chr(Level));
+			}else{
+				MakeString(To_Processor$, "%s%s\x00%s%s%s", chr(Header), chr(SAL), chr(Ramp_Rate), chr(Addr), chr(Level));
+			}
+		}
+	}
+
+	Call MKCBus(To_Processor$);
+}
+
+/*
+Integer_Function MyIntFunction1()
+{
+    // TODO:  Add local variable declarations here
+
+    // TODO:  Add code here
+
+    Return (0);
+}
+*/
+
+/*
+String_Function MyStrFunction1()
+{
+    // TODO:  Add local variable declarations here
+
+    // TODO:  Add code here
+
+    Return ("");
+}
+*/
+
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+PUSH iOn
+{
+	CMD = 0x79;
+
+	call MKString(1);
+}
+PUSH iOff
+{
+	CMD = 0x01;
+
+	call MKString(1);
+}
+CHANGE iLevel
+{
+	Level = iLevel / 258;
+
+	call MKString(2);
+}
+/*
+RELEASE input
+{
+    // TODO:  Add code here
+}
+*/
+
+/*
+CHANGE input
+{
+    // TODO:  Add code here
+}
+*/
+
+/*
+EVENT
+{
+    // TODO:  Add code here
+}
+*/
+
+/*
+SOCKETCONNECT
+{
+    // TODO:  Add code here
+}
+*/
+
+/*
+SOCKETDISCONNECT
+{
+    // TODO:  Add code here
+}
+*/
+
+/*
+SOCKETRECEIVE
+{
+    // TODO:  Add code here
+}
+*/
+
+/*
+SOCKETSTATUS
+{
+    // TODO:  Add code here
+}
+*/
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+/*
+Function Main()
+{
+    // TODO:  Add code here
+    // Initialize declared global and local variables/arrays as needed.
+
+    // WaitForInitializationComplete();
+    // If you are reading any Input or Output variables, uncomment
+    //   the WaitForInitializationComplete statement above and read
+    //   them afterwards.  Input/Output variables will not have
+    //   their correct values set until after the logic processor
+    //   runs and propagates the values to them.
+}
+*/
+

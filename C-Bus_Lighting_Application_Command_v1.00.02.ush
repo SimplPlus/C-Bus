@@ -1,0 +1,177 @@
+[BEGIN]
+  Version=1
+[END]
+[BEGIN]
+  ObjTp=FSgntr
+  Sgntr=UserSPlus
+  RelVrs=1
+  IntStrVrs=1
+  SPlusVrs=4.04.01
+  CrossCplrVrs=1.3
+[END]
+[BEGIN]
+  ObjTp=Hd
+  Cmn1=RS232, 9600,8,1,n\\\\Bridge = 0 use local C-Bus Networks.\\
+[END]
+[BEGIN]
+  ObjTp=Symbol
+  Exclusions=1,19,20,21,88,89,167,168,179,213,214,215,216,217,225,226,248,249,266,267,310,718,756,854,
+  Exclusions_CDS=
+  Inclusions_CDS=5,6
+  Name=C-Bus_Lighting_Application_Command_v1.00.02
+  SmplCName=C-Bus_Lighting_Application_Command_v1.00.02.usp
+  Code=1
+  SysRev5=4.000
+  SMWRev=2.02.05
+  InputCue1=iOn
+  InputSigType1=Digital
+  InputCue2=iOff
+  InputSigType2=Digital
+  InputCue3=[~UNUSED~]
+  InputSigType3=Digital
+  InputList2Cue1=iLevel
+  InputList2SigType1=Analog
+  InputList2Cue2=[~UNUSED~]
+  InputList2SigType2=Analog
+  OutputList2Cue1=To_C_Bus$
+  OutputList2SigType1=Serial
+  ParamCue1=[Reference Name]
+  ParamCue2=[~UNUSED~]
+  ParamSigType2=Constant
+  ParamCue3=[~UNUSED~]
+  ParamSigType3=Constant
+  ParamCue4=[~UNUSED~]
+  ParamSigType4=Constant
+  ParamCue5=[~UNUSED~]
+  ParamSigType5=Constant
+  ParamCue6=[~UNUSED~]
+  ParamSigType6=Constant
+  ParamCue7=[~UNUSED~]
+  ParamSigType7=Constant
+  ParamCue8=Bridge
+  ParamSigType8=Constant|HexAddress
+  ParamCue9=Addr
+  ParamSigType9=Constant|HexAddress
+  ParamCue10=Ramp_Rate,2h,10h,18h,26h,34h,42h,50h,58h,66h,74h,82h,90h,98h,106h,114h,122h
+  ParamSigType10=List
+  MinVariableInputs=3
+  MaxVariableInputs=3
+  MinVariableInputsList2=2
+  MaxVariableInputsList2=2
+  MinVariableOutputs=0
+  MaxVariableOutputs=0
+  MinVariableOutputsList2=1
+  MaxVariableOutputsList2=1
+  MinVariableParams=9
+  MaxVariableParams=9
+  Expand=expand_separately
+  Expand2=expand_separately
+  ProgramTree=Logic
+  SymbolTree=4
+  Hint=
+  PdfHelp=
+  HelpID= 
+  Render=4
+  Smpl-C=16
+  CompilerCode=-48
+  CompilerParamCode=27
+  CompilerParamCode5=14
+  NumFixedParams=1
+  Pp1=1
+  Pp8=8
+  Pp9=9
+  Pp10=10
+  MPp=10
+  NVStorage=10
+  ParamSigType1=String
+  SmplCInputCue1=o#
+  SmplCOutputCue1=i#
+  SmplCInputList2Cue1=an#
+  SmplCOutputList2Cue1=ai#
+  SPlus2CompiledName=S2_C_Bus_Lighting_Application_Command_v1_00_02
+  SymJam=NonExclusive
+  FileName=C-Bus_Lighting_Application_Command_v1.00.02.ush
+  SIMPLPlusModuleEncoding=0
+[END]
+[BEGIN]
+  ObjTp=Dp
+  H=1
+  Tp=1
+  NoS=False
+[END]
+[BEGIN]
+  ObjTp=Dp
+  H=8
+  Tp=1
+  HD=True
+  DV=0d
+  Sgn=0
+  Lng=False
+  NF=3
+  NoS=True
+  DNF=1
+  VVS=1
+  LR=0d
+  HR=254d
+[END]
+[BEGIN]
+  ObjTp=Dp
+  H=9
+  Tp=1
+  HD=True
+  DV=1d
+  Sgn=0
+  Lng=False
+  NF=3
+  NoS=True
+  DNF=1
+  VVS=1
+  LR=0d
+  HR=254d
+[END]
+[BEGIN]
+  ObjTp=Dp
+  H=10
+  Tp=1
+  HD=True
+  DV=02h
+  Sgn=0
+  Lng=False
+  NF=3
+  NoS=True
+  DNF=2
+  VVS=2
+  VN=16
+  Val1=02h
+  Lbl1=0s
+  Val2=0Ah
+  Lbl2=4s
+  Val3=12h
+  Lbl3=8s
+  Val4=1Ah
+  Lbl4=12s
+  Val5=22h
+  Lbl5=20s
+  Val6=2Ah
+  Lbl6=30s
+  Val7=32h
+  Lbl7=40s
+  Val8=3Ah
+  Lbl8=1m
+  Val9=42h
+  Lbl9=1.5m
+  Val10=4Ah
+  Lbl10=2m
+  Val11=52h
+  Lbl11=3m
+  Val12=5Ah
+  Lbl12=5m
+  Val13=62h
+  Lbl13=7m
+  Val14=6Ah
+  Lbl14=10m
+  Val15=72h
+  Lbl15=15m
+  Val16=7Ah
+  Lbl16=17m
+[END]
